@@ -68,7 +68,7 @@ fun GameTable(
     verticalArrangement: Arrangement.Vertical = Arrangement.Top,
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
     cellSize: Dp = 0.dp,
-    cellBorderSize: Dp = 8.dp,
+    cellBorderSize: Dp = 0.dp,
     gameTableStateKeeper: GameTableStateKeeper
 ) {
     val (whoTurn, gameTableGrid) = gameTableStateKeeper
