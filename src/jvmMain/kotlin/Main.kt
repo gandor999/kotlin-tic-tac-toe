@@ -135,7 +135,7 @@ fun App() { //TODO: make a coin toss next time to determine who goes first
 
             Button(
                 onClick = {
-                    gameTableStateKeeper.resetButtonIsClicked.value = !gameTableStateKeeper.resetButtonIsClicked.value
+                    if (!gameTableStateKeeper.resetButtonIsClicked.value) gameTableStateKeeper.resetButtonIsClicked.value = !gameTableStateKeeper.resetButtonIsClicked.value
                 }, modifier = constants.modifyPointerToHandOnHover
             ) {
                 Text(
