@@ -4,7 +4,8 @@ import androidx.compose.runtime.*
 
 data class GameTableStateKeeper(
     val whoTurn: MutableState<String>,
-    val gameTableGrid: MutableList<MutableList<Pair<String, String>>>
+    val gameTableGrid: MutableList<MutableList<Pair<String, String>>>,
+    val resetButtonIsClicked: MutableState<Boolean>
 )
 
 @Composable
@@ -20,7 +21,9 @@ fun InitGameTableStates(): GameTableStateKeeper {
                     Pair("", "upperRight"), Pair("", "upper"), Pair("", "upperLeft")
                 )
             )
-        })
+        },
+        resetButtonIsClicked = remember { mutableStateOf(false) }
+        )
 
     return gameTableStateKeeper
 }

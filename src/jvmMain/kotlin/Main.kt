@@ -2,6 +2,7 @@
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -18,9 +19,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import god_functions.ResetGame
 import state_management.GameTableStateKeeper
 import state_management.InitGameTableStates
 
+val constants = Constants()
 
 @Composable
 fun TableCell(
@@ -64,6 +67,8 @@ fun GameTable(
     modifier: Modifier = Modifier,
     verticalArrangement: Arrangement.Vertical = Arrangement.Top,
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
+    cellSize: Dp = 0.dp,
+    cellBorderSize: Dp = 8.dp,
     gameTableStateKeeper: GameTableStateKeeper
 ) {
     val (whoTurn, gameTableGrid) = gameTableStateKeeper
@@ -73,21 +78,26 @@ fun GameTable(
         verticalArrangement = verticalArrangement,
         horizontalAlignment = horizontalAlignment
     ) {
-        for (gameTableRow in gameTableGrid) {
+        for ((i, gameTableRow) in gameTableGrid.withIndex()) {
             Row(
                 horizontalArrangement = Arrangement.Center,
             ) {
-                for ((i, gameTableCell) in gameTableRow.withIndex()) {
+                for ((j, gameTableCell) in gameTableRow.withIndex()) {
                     val (insignia, borderCorner) = gameTableCell
                     TableCell(
-                        text = insignia, modifier = Modifier.clickable {
+                        text = insignia,
+                        modifier = constants.modifyPointerToHandOnHover.clickable {
                             if (insignia == "") {
-                                gameTableRow[i] = Pair(
-                                    if (whoTurn.value == "O") "O" else "X", borderCorner
+                                gameTableGrid[i][j] = Pair(
+                                    if (gameTableStateKeeper.whoTurn.value == "O") "O" else "X",
+                                    borderCorner
                                 )
                                 whoTurn.value = if (whoTurn.value == "O") "X" else "O"
                             }
-                        }, borderCorner = borderCorner, cellSize = 150.dp, cellBorderSize = 10.dp
+                        },
+                        borderCorner = borderCorner,
+                        cellSize = cellSize,
+                        cellBorderSize = cellBorderSize
                     )
                 }
             }
@@ -104,7 +114,6 @@ fun App() { //TODO: make a coin toss next time to determine who goes first
     //TODO: let the loser decide what they want to be next
     //TODO: have more than one round
     //TODO: make a menu where the players can put their names in and configure how many rounds
-    //TODO: make reset button
 
     val gameTableStateKeeper = InitGameTableStates()
 
@@ -115,12 +124,28 @@ fun App() { //TODO: make a coin toss next time to determine who goes first
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             GameTable(
-                modifier = Modifier.padding(20.dp).size(500.dp),
+                modifier = Modifier.padding(20.dp).size(300.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
+                cellSize = 80.dp,
+                cellBorderSize = 8.dp,
                 gameTableStateKeeper = gameTableStateKeeper
             )
+
+            Button(
+                onClick = {
+                    gameTableStateKeeper.resetButtonIsClicked.value = !gameTableStateKeeper.resetButtonIsClicked.value
+                }, modifier = constants.modifyPointerToHandOnHover
+            ) {
+                Text(
+                    text = "Reset"
+                )
+            }
         }
+    }
+
+    if (gameTableStateKeeper.resetButtonIsClicked.value) {
+        ResetGame(gameTableStateKeeper)
     }
 
     CheckGame(gameTableStateKeeper)
