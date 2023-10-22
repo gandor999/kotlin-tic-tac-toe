@@ -43,12 +43,12 @@ fun TableCell(
     ) {
         Box(contentAlignment = Alignment.Center,
             modifier = Modifier.clip(shape = RectangleShape).size(cellSize).drawBehind {
-                drawBorderController(
-                    borderCorner = borderCorner,
-                    CommonArgsForBorderDrawing = CommonArgsForBorderDrawing(
+                DrawBorderControllerClass(
+                    commonArgsForBorderDrawing = CommonArgsForBorderDrawing(
                         this, borderSize, pxTableCellSizeHeight, pxTableCellSizeWidth, Color.Black
                     )
-                )
+                ).strategies[borderCorner]?.invoke()
+
             }) {
             Text(
                 text = text,
@@ -78,7 +78,7 @@ fun GameTable(
         verticalArrangement = verticalArrangement,
         horizontalAlignment = horizontalAlignment
     ) {
-        for ((i, gameTableRow) in gameTableGrid.withIndex()) {
+        for (gameTableRow in gameTableGrid) {
             Row(
                 horizontalArrangement = Arrangement.Center,
             ) {
@@ -88,7 +88,7 @@ fun GameTable(
                         text = insignia,
                         modifier = constants.modifyPointerToHandOnHover.clickable {
                             if (insignia == "") {
-                                gameTableGrid[i][j] = Pair(
+                                gameTableRow[j] = Pair(
                                     if (gameTableStateKeeper.whoTurn.value == "O") "O" else "X",
                                     borderCorner
                                 )
@@ -114,6 +114,7 @@ fun App() { //TODO: make a coin toss next time to determine who goes first
     //TODO: let the loser decide what they want to be next
     //TODO: have more than one round
     //TODO: make a menu where the players can put their names in and configure how many rounds
+    //TODO: make some kind of modal that informs who wins
 
     val gameTableStateKeeper = InitGameTableStates()
 

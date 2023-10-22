@@ -62,76 +62,74 @@ fun drawUpperBorder(
     )
 }
 
-
-fun drawBorderController(
-    borderCorner: String = "", CommonArgsForBorderDrawing: CommonArgsForBorderDrawing
-) {
-    when (borderCorner) {
-        "bottomRight" -> {
+data class DrawBorderControllerClass(
+    val commonArgsForBorderDrawing: CommonArgsForBorderDrawing,
+    val strategies: HashMap<String, () -> Unit> = hashMapOf(
+        "bottomRight" to {
             drawBottomBorder(
-                CommonArgsForBorderDrawing
+                commonArgsForBorderDrawing
             )
             drawRightBorder(
-                CommonArgsForBorderDrawing
+                commonArgsForBorderDrawing
             )
-        }
+        },
 
-        "bottomLeft" -> {
+        "bottomLeft" to {
             drawBottomBorder(
-                CommonArgsForBorderDrawing
+                commonArgsForBorderDrawing
             )
             drawLeftBorder(
-                CommonArgsForBorderDrawing
+                commonArgsForBorderDrawing
             )
-        }
+        },
 
-        "upperRight" -> {
+        "upperRight" to {
             drawUpperBorder(
-                CommonArgsForBorderDrawing
+                commonArgsForBorderDrawing
             )
             drawRightBorder(
-                CommonArgsForBorderDrawing
+                commonArgsForBorderDrawing
             )
-        }
+        },
 
-        "upperLeft" -> {
+        "upperLeft" to {
             drawUpperBorder(
-                CommonArgsForBorderDrawing
+                commonArgsForBorderDrawing
             )
             drawLeftBorder(
-                CommonArgsForBorderDrawing
+                commonArgsForBorderDrawing
             )
-        }
+        },
 
-        "upper" -> {
+        "upper" to {
             drawUpperBorder(
-                CommonArgsForBorderDrawing
+                commonArgsForBorderDrawing
             )
-        }
+        },
 
-        "bottom" -> {
+        "bottom" to {
             drawBottomBorder(
-                CommonArgsForBorderDrawing
+                commonArgsForBorderDrawing
             )
-        }
+        },
 
-        "right" -> {
+        "right" to {
             drawRightBorder(
-                CommonArgsForBorderDrawing
+                commonArgsForBorderDrawing
             )
-        }
+        },
 
-        "left" -> {
+        "left" to {
             drawLeftBorder(
-                CommonArgsForBorderDrawing
+                commonArgsForBorderDrawing
             )
-        }
+        },
 
-        "allSides" -> {
+        "allSides" to {
             val temp = listOf("bottom", "upper", "right", "left")
             temp.forEach {
-                drawBorderController(it, CommonArgsForBorderDrawing)
+                DrawBorderControllerClass(commonArgsForBorderDrawing = commonArgsForBorderDrawing).strategies[it]?.invoke()
             }
-        }
-    }
-}
+        },
+    )
+)
