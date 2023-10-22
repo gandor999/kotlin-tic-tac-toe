@@ -17,6 +17,4 @@ fun ResetGame(
     gameTableStateKeeper.gameTableGrid[2] = mutableStateListOf(
         Pair("", "upperRight"), Pair("", "upper"), Pair("", "upperLeft")
     )
-
-    gameTableStateKeeper.resetButtonIsClicked.value = !gameTableStateKeeper.resetButtonIsClicked.value
 }

@@ -147,6 +147,7 @@ fun App() { //TODO: make a coin toss next time to determine who goes first
 
     if (gameTableStateKeeper.resetButtonIsClicked.value) {
         ResetGame(gameTableStateKeeper)
+        gameTableStateKeeper.resetButtonIsClicked.value = !gameTableStateKeeper.resetButtonIsClicked.value
     }
 
     CheckGame(gameTableStateKeeper)
